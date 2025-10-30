@@ -14,4 +14,15 @@ int your_function()
     return 0;
 }
 
+void arrfunc(int arr[], int &size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (arr[i] <= 5 || i > 3)
+        {
+            arr[i]++;
+        }
+    }
+    size--;
+}
 #endif

@@ -93,6 +93,7 @@ bool binary_search(const int arr[], int val, int start, int end)
 
     // Base case 1: check middle value, if middle is val, return true
     int middle = (start + end) / 2;
+    
     if (arr[middle] == val)
     {
         return true;

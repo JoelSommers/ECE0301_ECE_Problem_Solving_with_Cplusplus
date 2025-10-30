@@ -5,11 +5,9 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
+#include <cmath>
 
-double conversion(std::string);
-double area(double);
-double area(double, double);
-double area(double, double, double);
+#include "shapes.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -135,49 +133,14 @@ int main(int argc, char *argv[])
 
         file_write << std::fixed << std::setprecision(2);
         file_write << "Area is : " << result << std::endl;
+        std::cout << "Please enter a number: " << std::endl;
+        int user_input;
+        std::cin >> user_input;
+
+        file_write << "Your input is written into files" << user_input << std::endl;
     }
 
     file_read.close();
     file_write.close();
     return EXIT_SUCCESS;
-}
-
-// we expect to have a function converting string to double
-// "a = 3.14"  -->  3.14
-// "r = 2.71"  -->  2.71
-double conversion(std::string input_string)
-{
-    int equals_index = input_string.find("=");
-
-    if (equals_index == std::string::npos)
-    {
-        std::cout << "Input formatting error" << std::endl;
-        return -1;
-    }
-
-    std::string number_string = input_string.substr(equals_index + 2, input_string.length());
-    double value;
-    try
-    {
-        value = std::stod(number_string);
-    }
-    catch (std::invalid_argument)
-    {
-        std::cout << "Invalid input, must be a number" << std::endl;
-        return -1;
-    }
-    return value;
-}
-
-double area(double r)
-{
-    return M_PI * pow(r, 2);
-}
-double area(double w, double l)
-{
-    return w * l;
-}
-double area(double a, double b, double sinC)
-{
-    return 0.5 * a * b * sinC;
 }

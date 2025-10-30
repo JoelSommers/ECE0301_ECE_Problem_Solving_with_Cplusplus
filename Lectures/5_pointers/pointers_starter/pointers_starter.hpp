@@ -10,7 +10,11 @@
  */
 int *copy(const int *arr, const int size)
 {
-  return nullptr;
+  int * arr_copy = new int[size];
+  for (int i=0;i<size;i++){
+    arr_copy[i]=arr[i];
+  }
+  return arr_copy; // a new dynamically created array
 }
 
 /**
@@ -22,6 +26,25 @@ int *copy(const int *arr, const int size)
  */
 void append(int *&arr, const int newval, int &size)
 {
+  //store the old arr somewhere
+  int *old_arr = arr;
+
+  //assign the arr with new empty size+1
+  arr = new int[size+1];
+
+  //copy the first n element from old to new
+  for (int i=0;i<size;i++){
+    arr[i]=old_arr[i];
+  }
+
+  //assign the last element to be the newval
+  arr[size]=newval;
+  
+  //update size accordingly
+  size++;
+
+  delete [] old_arr;
+
 }
 
 #endif

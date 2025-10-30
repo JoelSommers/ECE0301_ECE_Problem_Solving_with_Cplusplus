@@ -57,22 +57,113 @@ void initialize(double *database)
 bool search(const std::string field, const double value,
             const double *database, const int rows)
 {
-    // TODO
+    // check if field is non-existant (added after 1st attempt)!!!
+    if (column_index(field) == -1)
+    {
+        return false;
+    }
+
+    // find the columns index
+    int col = column_index(field);
+
+    // loop through the database and sequentially search each element in the specified field.
+    int ind;
+    for (int i = 0; i < rows; i++)
+    {
+        ind = index(i, col);
+
+        // approximate equality due to floating point values
+        if (std::abs(value - database[ind]) <= THRESHOLD)
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
 bool add_entry(const double new_row[],
                double *&database, int &rows)
 {
-    // TODO, refer to general workflow of append() in steps/pointers_6.hpp
-    return false;
+    // after 3rd attmpt: I realized that I created a new dynamically allocated array before the error case which is causing errors in the test case.
+
+    // check for duplicates before adding new entry
+    if (search(FIELDS[0], new_row[0], database, rows))
+    {
+        return false;
+    }
+
+    // copy the old arr into a pointer to keep a copy of it
+    double *old_database = database;
+
+    // create new dynamically allocated array with a new size of (rows+1)*COLS
+    database = new double[(rows + 1) * COLS];
+
+    // element-wise copy
+    for (int i = 0; i < rows * COLS; i++)
+    {
+        database[i] = old_database[i];
+    }
+
+    // assign the new_row to the end of the array
+    for (int j = 0; j < COLS; j++)
+    {
+        database[rows * COLS + j] = new_row[j];
+    }
+
+    // update the rows
+    rows++;
+
+    // deallocate the old database
+    delete[] old_database;
+
+    return true;
 }
 
 bool remove_entry(const double id,
                   double *&database, int &rows)
 {
-    // TODO
-    return false;
+
+    // after 3rd attmpt: I realized that I created a new dynamically allocated array before the error case which is causing errors in the test case.
+
+    // check for valid ID
+    if (!search("ID", id, database, rows))
+    {
+        return false;
+    }
+
+    // copy the old arr into a pointer to keep a copy of it
+    double *old_database = database;
+
+    // create new dynamically allocated array with a new size of (rows-1)*COLS
+    database = new double[(rows - 1) * COLS];
+
+    // element-wise copy every row except for the one that has the id
+    int iter = 0;
+    for (int i = 0; i < rows * COLS; i++)
+    {
+        // {1,2,3,4}, {2,2,3,4}, {3,2,3,4}
+        if (old_database[i] == id)
+        {
+            i = i + COLS;
+            if (i == rows * COLS)
+            {
+                break;
+            }
+        }
+        database[iter] = old_database[i];
+        iter++;
+    }
+
+    // update rows
+    rows--;
+
+    // deallocate the old database
+    delete[] old_database;
+
+    return true;
 }
 
 #endif
+
+//after 2nd attmempt i tried deallocating the memory before returning false
